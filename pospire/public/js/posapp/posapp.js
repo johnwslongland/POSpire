@@ -30,6 +30,9 @@ frappe.PosApp.posapp = class {
 		this.$parent = $(document);
 		this.page = parent.page;
 		ensurePospireFontsLoaded();
+		if (!$('.shortcut-divider').length) {
+		    $('body').append('<div class="shortcut-divider" style="display:none !important;"></div>');
+		}
 		this.make_body();
 	}
 	make_body() {
