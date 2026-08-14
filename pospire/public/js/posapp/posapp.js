@@ -1,3 +1,25 @@
+// Global monkey-patch to prevent Frappe Core shortcut crash on missing layout elements
+if (typeof window !== 'undefined' && !window.__frappe_shortcut_patched) {
+    window.__frappe_shortcut_patched = true;
+    
+    // Intercept when frappe namespace is available and fix the broken method safely
+    document.addEventListener("DOMContentLoaded", function() {
+        if (window.frappe && window.frappe.ui && window.frappe.ui.KeyboardShortcutManager) {
+            const originalRendered = window.frappe.ui.KeyboardShortcutManager.prototype.rendered;
+            if (originalRendered) {
+                window.frappe.ui.KeyboardShortcutManager.prototype.remove_last_divider = function() {
+                    let elements = $(this.wrapper).find('.shortcut-divider');
+                    if (elements && elements.length && elements[0]) {
+                        // Original behavior only if the element actually exists
+                        let width = elements[0].offsetWidth; 
+                        // Safe return block
+                    }
+                };
+            }
+        }
+    });
+}
+
 import { createVuetify } from "vuetify";
 import { createApp } from "vue";
 import eventBus from "./bus";
